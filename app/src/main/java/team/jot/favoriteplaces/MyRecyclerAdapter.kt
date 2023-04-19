@@ -1,5 +1,7 @@
 package team.jot.favoriteplaces
 
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -35,14 +37,13 @@ class MyRecyclerAdapter(private val destinations: MutableList<Destination>): Rec
             }
 
 
-            // Set onLongClickListener to show a toast message and remove the selected row item from the list
+
             // Make sure to change the  MyViewHolder class to inner class to get a reference to an object of outer class
             itemView.setOnLongClickListener {
 
-                val selectedItem = adapterPosition
-                destinations.removeAt(selectedItem)
-                notifyItemRemoved(selectedItem)
-                Toast.makeText(itemView.context, "Long press, deleting $selectedItem", Toast.LENGTH_SHORT).show()
+                var myIntent = Intent(itemView.getContext(), DestinationCreation::class.java)
+                myIntent.putExtra("destinationId", adapterPosition)
+                itemView.getContext().startActivity(myIntent)
 
                 return@setOnLongClickListener true
             }
@@ -66,10 +67,9 @@ class MyRecyclerAdapter(private val destinations: MutableList<Destination>): Rec
         // - replace the contents of the view with that element
         val currentItem = destinations[position]
         holder.destinationName.text = currentItem.name
-        holder.destinationImage.setImageResource(currentItem.image)
+        holder.destinationImage.setImageBitmap(BitmapFactory.decodeByteArray(currentItem.image, 0 , currentItem.image.size))
         holder.description.text = currentItem.description
         holder.rating.rating = currentItem.rating
-
 
     }
 
@@ -77,5 +77,4 @@ class MyRecyclerAdapter(private val destinations: MutableList<Destination>): Rec
     override fun getItemCount(): Int {
         return destinations.size
     }
-
 }

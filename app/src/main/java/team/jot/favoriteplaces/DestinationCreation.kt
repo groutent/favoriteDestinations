@@ -4,84 +4,70 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import org.w3c.dom.Text
+import java.io.ByteArrayOutputStream
 
-class SecondActivity : AppCompatActivity() {
+class DestinationCreation : AppCompatActivity() {
 
-    private val FILE_NAME = "Destinations"
-    lateinit var viewModel: DestinationViewModel
-    private var destinationId: Int = -1
+    val index = 0;
+
+    //To access your database, instantiate your subclass of SQLiteOpenHelper
+    private val dbHelper = ContactDbHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destination_creation)
 
-        // The following code accesses any extras passed in intent using methods like getIntExtra(), getStringExtra
-        // Remember: intent is like a global variable that can be accessed in an Activity
-        destinationId = intent.getIntExtra("destinationId", -1)
-
-        // Update activity data for current destination
-        if(destinationId > -1){
-            initializeActivity()
-        }
+        //val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        //startActivity(cameraIntent)
     }
 
-    fun initializeActivity(){
-        TODO("Using viewModel and destinationId fill in all elements for user to view/edit")
-    }
+
 
     //Cancel Button, don't save any changes simply return to main activity
-    fun cancel(){
-        finish()
-    }
-
-    //Delete button, remove current destination from model, save, and return
-    fun delete(){
-        viewModel.removeDestination(destinationId)
-        saveData()
+    fun cancel(view: View){
         finish()
     }
 
 
     //Save Button
     fun returnDataToFirstActivity(view: View) {
-        saveData()
+        dbHelper.insertData(findViewById<EditText>(R.id.destinationName).text.toString(),
+            findViewById<EditText>(R.id.destinationDescription).text.toString(),
+            getByteArray(),
+            findViewById<RatingBar>(R.id.rating).rating, "0.0", "0.0")
+        val myIntent = Intent()
+        setResult(Activity.RESULT_OK, myIntent)
         finish()
     }
 
-    //save the data to SharedPreferences
-    fun saveData() {
-        // Create an instance of getSharedPreferences for edit
-        val sharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
 
-        // Create an instance of Gson (make sure to include its dependency first to be able use gson)
-        val gson = Gson()
-
-        editor.putString("destinations", gson.toJson(viewModel.getAllDestinations()))
-        // Apply the changes
-        editor.apply()
+    fun getByteArray(): ByteArray{
+        val bitmap = (findViewById<ImageView>(R.id.destinationImage).drawable as BitmapDrawable).getBitmap()
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+        val image = stream.toByteArray()
+        return image
     }
 
-    // Load the previously saved destinations
-    fun loadData() {
-        // Create an instance of getSharedPreferences for retrieve the data
-        val sharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE)
-        // Retrieve data using the key, default value is empty string in case no saved data in there
-        val tasks = sharedPreferences.getString("ratings", "") ?: ""
-
-        if (tasks.isNotEmpty()) {
-            val gson = Gson()
-            val sType = object : TypeToken<MutableList<Destination>>() {}.type
-            viewModel.setAllRatings(gson.fromJson<MutableList<Destination>>(tasks, sType))
-
-            TODO("Initialize current activity if editing an exisiting destination. Otherwise leave as default/empty")
-        }
+    /*
+     * Since getWritableDatabase() and getReadableDatabase() are expensive to call when the database
+     * is closed, you should leave your database connection open for as long as you possibly need to access it.
+     * Typically, it is optimal to close the database in the onDestroy() of the calling Activity.
+     */
+    override fun onDestroy() {
+        dbHelper.close()
+        super.onDestroy()
     }
 }
