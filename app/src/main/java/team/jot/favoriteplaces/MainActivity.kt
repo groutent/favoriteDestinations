@@ -7,9 +7,13 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MainActivity : AppCompatActivity() {
 
+    private val FILE_NAME = "Destinations"
+    lateinit var viewModel: DestinationViewModel
     private val TAG = "MainActivity"
     private var refreshCount = 0
     private var destinations = mutableListOf<Destination>()
@@ -29,9 +33,6 @@ class MainActivity : AppCompatActivity() {
 
         // use a linear layout manager, you can use different layouts as well
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // if you want, you can make the layout of the recyclerview horizontal as follows
-        //recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
 
         // Add a divider between rows -- Optional
@@ -56,5 +57,19 @@ class MainActivity : AppCompatActivity() {
 
         // return the list of contacts
         return destinations
+    }
+
+    // Load the previously saved destinations
+    fun loadData() {
+        // Create an instance of getSharedPreferences for retrieve the data
+        val sharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE)
+        // Retrieve data using the key, default value is empty string in case no saved data in there
+        val tasks = sharedPreferences.getString("ratings", "") ?: ""
+
+        if (tasks.isNotEmpty()) {
+            val gson = Gson()
+            val sType = object : TypeToken<MutableList<Destination>>() {}.type
+            viewModel.setAllRatings(gson.fromJson<MutableList<Destination>>(tasks, sType))
+        }
     }
 }
