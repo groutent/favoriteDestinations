@@ -5,5 +5,7 @@ import android.location.Location
 import android.media.Image
 
 data class Destination(val name: String,
-                       val image: Int
+                       val image: Int,
+                       val description: String,
+                       val rating: Float
 )

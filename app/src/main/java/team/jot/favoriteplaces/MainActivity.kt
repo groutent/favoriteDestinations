@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         // The for loop will generate [size] amount of contact data and store in a list
         for (i in 1..size) {
-            val person = Destination("John Doe-$i", R.drawable.test)
+            val person = Destination("Test Location-$i", R.drawable.test, "This is a test description. Users will be able to create their own.", 2.5F)
             contacts.add(person)
         }
 

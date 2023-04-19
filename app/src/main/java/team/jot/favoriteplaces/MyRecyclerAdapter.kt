@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class MyRecyclerAdapter(private val contacts: ArrayList<Destination>): RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>() {
+class MyRecyclerAdapter(private val destinations: ArrayList<Destination>): RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>() {
 
     private val TAG = "MyRecyclerAdapter"
     var count = 1 //This variable is used for just testing purpose to understand how RecyclerView works
@@ -23,6 +24,8 @@ class MyRecyclerAdapter(private val contacts: ArrayList<Destination>): RecyclerV
         // Each MyViewHolder object keeps a reference to 3 view items in our row_item.xml file
         val destinationName = itemView.findViewById<TextView>(R.id.destination_name)
         val destinationImage = itemView.findViewById<ImageView>(R.id.destination_image)
+        val description = itemView.findViewById<TextView>(R.id.description)
+        val rating = itemView.findViewById<RatingBar>(R.id.ratingBar)
 
 
         init {
@@ -37,7 +40,7 @@ class MyRecyclerAdapter(private val contacts: ArrayList<Destination>): RecyclerV
             itemView.setOnLongClickListener {
 
                 val selectedItem = adapterPosition
-                contacts.removeAt(selectedItem)
+                destinations.removeAt(selectedItem)
                 notifyItemRemoved(selectedItem)
                 Toast.makeText(itemView.context, "Long press, deleting $selectedItem", Toast.LENGTH_SHORT).show()
 
@@ -61,16 +64,18 @@ class MyRecyclerAdapter(private val contacts: ArrayList<Destination>): RecyclerV
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        val currentItem = contacts[position]
+        val currentItem = destinations[position]
         holder.destinationName.text = currentItem.name
         holder.destinationImage.setImageResource(currentItem.image)
+        holder.description.text = currentItem.description
+        holder.rating.rating = currentItem.rating
 
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
-        return contacts.size
+        return destinations.size
     }
 
 }
