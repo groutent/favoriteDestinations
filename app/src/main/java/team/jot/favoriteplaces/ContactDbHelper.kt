@@ -113,12 +113,12 @@ class ContactDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     /**
      * deleteData method allows to delete a given row based on the id
      */
-    fun deleteData(id : String) : Int {
+    fun deleteData(id : Int) : Int {
 
         // Gets the data repository in write mode
         val db = this.writableDatabase
 
-        return db.delete(TABLE_NAME,"ID = ?", arrayOf(id))
+        return db.delete(TABLE_NAME,"ID = ?", arrayOf("$id"))
     }
 
     /**

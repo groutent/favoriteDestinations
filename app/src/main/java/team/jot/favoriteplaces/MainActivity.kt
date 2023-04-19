@@ -14,11 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import org.w3c.dom.Text
-import java.io.ByteArrayOutputStream
 
 class MainActivity : AppCompatActivity() {
 

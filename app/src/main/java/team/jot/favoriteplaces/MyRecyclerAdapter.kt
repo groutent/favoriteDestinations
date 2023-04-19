@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 class MyRecyclerAdapter(private val destinations: MutableList<Destination>): RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>() {
 
     private val TAG = "MyRecyclerAdapter"
-    var count = 1 //This variable is used for just testing purpose to understand how RecyclerView works
+    var count = 0 //This variable is used for just testing purpose to understand how RecyclerView works
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -41,10 +41,12 @@ class MyRecyclerAdapter(private val destinations: MutableList<Destination>): Rec
             // Make sure to change the  MyViewHolder class to inner class to get a reference to an object of outer class
             itemView.setOnLongClickListener {
 
-                var myIntent = Intent(itemView.getContext(), DestinationCreation::class.java)
-                myIntent.putExtra("destinationId", adapterPosition)
-                itemView.getContext().startActivity(myIntent)
-
+                val selectedItem = adapterPosition
+                val dbHelper = ContactDbHelper(itemView.context)
+                dbHelper.deleteData(destinations[selectedItem].id)
+                destinations.removeAt(selectedItem)
+                notifyItemRemoved(selectedItem)
+                Toast.makeText(itemView.context, "Long press, deleting $selectedItem", Toast.LENGTH_SHORT).show()
                 return@setOnLongClickListener true
             }
         }
@@ -75,6 +77,6 @@ class MyRecyclerAdapter(private val destinations: MutableList<Destination>): Rec
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
-        return destinations.size
+        return destinations.size -1
     }
 }
