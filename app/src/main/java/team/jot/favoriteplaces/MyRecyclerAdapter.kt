@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class MyRecyclerAdapter(private val destinations: ArrayList<Destination>): RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>() {
+class MyRecyclerAdapter(private val destinations: MutableList<Destination>): RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>() {
 
     private val TAG = "MyRecyclerAdapter"
     var count = 1 //This variable is used for just testing purpose to understand how RecyclerView works
