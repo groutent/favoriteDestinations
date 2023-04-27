@@ -68,8 +68,13 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val randomColorAPI = retrofit.create(RandomColorService::class.java)
+
+        //Generate random int within range of 0 to FFFFFF
         val randInt = (0..16777216).random()
-        randomColorAPI.getColorInfo( String.format("%1$06X",randInt)).enqueue(object :
+        //Convert Rand int to Hex String
+        val randHex = String.format("%1$06X",randInt)
+
+        randomColorAPI.getColorInfo(randHex).enqueue(object :
             Callback<ColorData> {
 
             override fun onFailure(call: Call<ColorData>, t: Throwable) {
