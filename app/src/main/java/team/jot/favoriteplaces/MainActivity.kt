@@ -3,6 +3,7 @@ package team.jot.favoriteplaces
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,9 +12,16 @@ import android.view.View
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.stream.JsonReader
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         getAllData()
+        
 
         // Store the the recyclerView widget in a variable
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
@@ -46,11 +55,42 @@ class MainActivity : AppCompatActivity() {
 
 
         destinationCreationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 getAllData()
                 adapter.notifyDataSetChanged()
             }
         }
+
+        val BASE_URL = "https://some-random-api.ml/canvas/misc/"
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val randomColorAPI = retrofit.create(RandomColorService::class.java)
+        val randInt = (0..16777216).random()
+        randomColorAPI.getColorInfo( String.format("%1$06X",randInt)).enqueue(object :
+            Callback<ColorData> {
+
+            override fun onFailure(call: Call<ColorData>, t: Throwable) {
+                Log.d(TAG, "onFailure : $t")
+            }
+
+            override fun onResponse(call: Call<ColorData>, response: Response<ColorData>) {
+                Log.d(TAG, "onResponse: $response")
+
+                val body = response.body()
+                if (body == null){
+                    Log.w(TAG, "Valid response was not received")
+                    return
+                }
+
+                // The following log messages are just for testing purpose
+                Log.d(TAG, ": ${body.r}")
+                findViewById<TextView>(R.id.titleText).setTextColor(Color.rgb(body.r,body.g,body.b))
+            }
+
+        })
     }
 
     fun createDestination(view: View){
@@ -90,5 +130,7 @@ class MainActivity : AppCompatActivity() {
         dbHelper.close()
         super.onDestroy()
     }
+
+    
 
 }

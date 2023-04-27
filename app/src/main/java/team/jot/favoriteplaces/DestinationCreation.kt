@@ -1,11 +1,15 @@
 package team.jot.favoriteplaces
 
+import android.Manifest
+import android.annotation.SuppressLint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -14,7 +18,11 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.CurrentLocationRequest
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import org.w3c.dom.Text
 import java.io.ByteArrayOutputStream
 
@@ -25,12 +33,14 @@ class DestinationCreation : AppCompatActivity() {
     //To access your database, instantiate your subclass of SQLiteOpenHelper
     private val dbHelper = ContactDbHelper(this)
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destination_creation)
 
-        //val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        //startActivity(cameraIntent)
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivity(cameraIntent)
     }
 
 
@@ -43,10 +53,11 @@ class DestinationCreation : AppCompatActivity() {
 
     //Save Button
     fun returnDataToFirstActivity(view: View) {
+
         dbHelper.insertData(findViewById<EditText>(R.id.destinationName).text.toString(),
             findViewById<EditText>(R.id.destinationDescription).text.toString(),
             getByteArray(),
-            findViewById<RatingBar>(R.id.rating).rating, "0.0", "0.0")
+            findViewById<RatingBar>(R.id.rating).rating, "0", "0")
         val myIntent = Intent()
         setResult(Activity.RESULT_OK, myIntent)
         finish()
