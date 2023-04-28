@@ -39,8 +39,8 @@ class DestinationCreation : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destination_creation)
 
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivity(cameraIntent)
+        //val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        //startActivity(cameraIntent)
     }
 
 
