@@ -2,6 +2,7 @@ package team.jot.favoriteplaces
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -40,13 +41,14 @@ class MyRecyclerAdapter(private val destinations: MutableList<Destination>): Rec
 
             // Make sure to change the  MyViewHolder class to inner class to get a reference to an object of outer class
             itemView.setOnLongClickListener {
-
                 val selectedItem = adapterPosition
                 val dbHelper = ContactDbHelper(itemView.context)
                 dbHelper.deleteData(destinations[selectedItem].id)
                 destinations.removeAt(selectedItem)
                 notifyItemRemoved(selectedItem)
                 Toast.makeText(itemView.context, "Long press, deleting $selectedItem", Toast.LENGTH_SHORT).show()
+                val mp = MediaPlayer.create(itemView.context, R.raw.deletesound)
+                mp.start()
                 return@setOnLongClickListener true
             }
         }

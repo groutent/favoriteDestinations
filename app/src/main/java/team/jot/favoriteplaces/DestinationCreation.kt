@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.location.Location
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -28,7 +29,7 @@ import java.io.ByteArrayOutputStream
 
 class DestinationCreation : AppCompatActivity() {
 
-    val index = 0;
+    val index = 0
 
     //To access your database, instantiate your subclass of SQLiteOpenHelper
     private val dbHelper = ContactDbHelper(this)
@@ -53,7 +54,8 @@ class DestinationCreation : AppCompatActivity() {
 
     //Save Button
     fun returnDataToFirstActivity(view: View) {
-
+        val mp = MediaPlayer.create(this, R.raw.createsound)
+        mp.start()
         dbHelper.insertData(findViewById<EditText>(R.id.destinationName).text.toString(),
             findViewById<EditText>(R.id.destinationDescription).text.toString(),
             getByteArray(),

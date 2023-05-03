@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Retrofit stuff
         val BASE_URL = "https://some-random-api.ml/canvas/misc/"
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -97,6 +99,8 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
+
+
 
     fun createDestination(view: View){
         var myIntent = Intent(this, DestinationCreation::class.java)
@@ -135,7 +139,4 @@ class MainActivity : AppCompatActivity() {
         dbHelper.close()
         super.onDestroy()
     }
-
-    
-
 }
