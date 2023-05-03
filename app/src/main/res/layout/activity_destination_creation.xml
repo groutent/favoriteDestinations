@@ -5,15 +5,19 @@
     android:id="@+id/destinationRating"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#C8A2C8"
     tools:context=".DestinationCreation">
 
     <EditText
         android:id="@+id/destinationName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
         android:ems="10"
-        android:hint="Destination Name"
+        android:hint="Enter Destination Name"
         android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,11 +25,14 @@
         android:id="@+id/destinationDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Description"
+        android:hint="Enter Description"
         android:inputType="textMultiLine"
         android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/destinationName" />
 
@@ -33,11 +40,12 @@
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
         android:layout_marginTop="56dp"
         android:numStars="5"
         android:rating="0"
         android:stepSize="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/destinationDescription"
         tools:ignore="SpeakableTextPresentCheck" />
@@ -46,9 +54,10 @@
         android:id="@+id/destinationImage"
         android:layout_width="127dp"
         android:layout_height="149dp"
-        android:layout_marginStart="132dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:src="@drawable/test"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rating" />
 
@@ -56,11 +65,12 @@
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="248dp"
         android:layout_marginTop="20dp"
         android:onClick="returnDataToFirstActivity"
         android:text="Save"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/location"
         app:layout_constraintTop_toBottomOf="@+id/destinationImage" />
 
     <Button
@@ -72,15 +82,18 @@
         android:onClick="location"
         android:text="Get my location"
         app:layout_constraintEnd_toStartOf="@+id/saveButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/destinationImage" />
 
     <TextView
         android:id="@+id/location_output"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="164dp"
         android:layout_marginTop="44dp"
         android:text="Lat:'0' Long: '0'"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/location" />
 </androidx.constraintlayout.widget.ConstraintLayout>
