@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     var destinations = mutableListOf<Destination>()
     lateinit private var recyclerView: RecyclerView
     lateinit var destinationCreationLauncher: ActivityResultLauncher<Intent>
+    lateinit var newPlacesOnMapLauncher: ActivityResultLauncher<Intent>
     var adapter = MyRecyclerAdapter(destinations)
 
     //To access your database, instantiate your subclass of SQLiteOpenHelper
@@ -56,6 +57,12 @@ class MainActivity : AppCompatActivity() {
 
 
         destinationCreationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                getAllData()
+                adapter.notifyDataSetChanged()
+            }
+        }
+        newPlacesOnMapLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 getAllData()
                 adapter.notifyDataSetChanged()
@@ -93,8 +100,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 // The following log messages are just for testing purpose
-                Log.d(TAG, ": ${body.r}")
-                findViewById<TextView>(R.id.titleText).setTextColor(Color.rgb(body.r,body.g,body.b))
+              //  Log.d(TAG, ": ${body.r}")
+              //  findViewById<TextView>(R.id.titleText).setTextColor(Color.rgb(body.r,body.g,body.b))
             }
 
         })
@@ -105,6 +112,11 @@ class MainActivity : AppCompatActivity() {
     fun createDestination(view: View){
         var myIntent = Intent(this, DestinationCreation::class.java)
         destinationCreationLauncher.launch(myIntent)
+    }
+
+    fun findNewDestination(view: View){
+        var myIntent = Intent(this, MapsActivity::class.java)
+        newPlacesOnMapLauncher.launch(myIntent)
     }
 
     /*
