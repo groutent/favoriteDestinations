@@ -40,16 +40,12 @@ class DestinationCreation : AppCompatActivity() {
 
     //To access your database, instantiate your subclass of SQLiteOpenHelper
     private val dbHelper = ContactDbHelper(this)
-    private var image = "https://www.svgrepo.com/show/92091/location-placeholder.svg"
+    private var image = ""
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destination_creation)
-
-        Glide.with(this)
-            .load(image)
-            .into(findViewById(R.id.imageButton))
         //val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         //startActivity(cameraIntent)
 
