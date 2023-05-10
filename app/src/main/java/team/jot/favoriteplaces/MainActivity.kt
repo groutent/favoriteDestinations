@@ -25,7 +25,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
-
+    //Needed variables in order to instantiate activities, recyclerview and database.
     private val TAG = "MainActivity"
     var destinations = mutableListOf<Destination>()
     lateinit private var recyclerView: RecyclerView
@@ -68,52 +68,15 @@ class MainActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         }
-
-        // Retrofit stuff
-        val BASE_URL = "https://some-random-api.ml/canvas/misc/"
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val randomColorAPI = retrofit.create(RandomColorService::class.java)
-
-        //Generate random int within range of 0 to FFFFFF
-        val randInt = (0..16777216).random()
-        //Convert Rand int to Hex String
-        val randHex = String.format("%1$06X",randInt)
-
-        randomColorAPI.getColorInfo(randHex).enqueue(object :
-            Callback<ColorData> {
-
-            override fun onFailure(call: Call<ColorData>, t: Throwable) {
-                Log.d(TAG, "onFailure : $t")
-            }
-
-            override fun onResponse(call: Call<ColorData>, response: Response<ColorData>) {
-                Log.d(TAG, "onResponse: $response")
-
-                val body = response.body()
-                if (body == null){
-                    Log.w(TAG, "Valid response was not received")
-                    return
-                }
-
-                // The following log messages are just for testing purpose
-              //  Log.d(TAG, ": ${body.r}")
-              //  findViewById<TextView>(R.id.titleText).setTextColor(Color.rgb(body.r,body.g,body.b))
-            }
-
-        })
     }
 
 
-
+    //Function that opens the creation of a favorite destination on button click
     fun createDestination(view: View){
         var myIntent = Intent(this, DestinationCreation::class.java)
         destinationCreationLauncher.launch(myIntent)
     }
-
+    //Function that opens the map search activity on button click
     fun findNewDestination(view: View){
         var myIntent = Intent(this, MapsActivity::class.java)
         newPlacesOnMapLauncher.launch(myIntent)
