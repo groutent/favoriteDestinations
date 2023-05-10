@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -14,18 +15,24 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.CurrentLocationRequest
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import org.w3c.dom.Text
-import java.io.ByteArrayOutputStream
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.random.Random
 
 class DestinationCreation : AppCompatActivity() {
 
@@ -33,15 +40,51 @@ class DestinationCreation : AppCompatActivity() {
 
     //To access your database, instantiate your subclass of SQLiteOpenHelper
     private val dbHelper = ContactDbHelper(this)
-
+    private var image = "https://www.svgrepo.com/show/92091/location-placeholder.svg"
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destination_creation)
 
+        Glide.with(this)
+            .load(image)
+            .into(findViewById(R.id.imageButton))
         //val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         //startActivity(cameraIntent)
+
+        // Retrofit stuff
+        val BASE_URL = "https://picsum.photos/id/"
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+
+        val randomImageAPI = retrofit.create(RandomImageService::class.java)
+        randomImageAPI.getImage(Random.nextInt(0,1000)).enqueue(object :
+            Callback<ImageData> {
+
+            override fun onFailure(call: Call<ImageData>, t: Throwable) {
+                Log.d(TAG, "onFailure : $t")
+            }
+
+            override fun onResponse(call: Call<ImageData>, response: Response<ImageData>) {
+                Log.d(TAG, "onResponse: $response")
+
+                val body = response.body()
+                if (body == null){
+                    Log.w(TAG, "Valid response was not received")
+                    return
+                }
+                Log.w(TAG, body.url)
+                image = body.download_url
+                Glide.with(this@DestinationCreation)
+                    .load(image)
+                    .into(findViewById(R.id.imageButton))
+            }
+
+        })
     }
 
 
@@ -58,20 +101,11 @@ class DestinationCreation : AppCompatActivity() {
         mp.start()
         dbHelper.insertData(findViewById<EditText>(R.id.destinationName).text.toString(),
             findViewById<EditText>(R.id.destinationDescription).text.toString(),
-            getByteArray(),
+            image,
             findViewById<RatingBar>(R.id.rating).rating, "0", "0")
         val myIntent = Intent()
         setResult(Activity.RESULT_OK, myIntent)
         finish()
-    }
-
-
-    fun getByteArray(): ByteArray{
-        val bitmap = (findViewById<ImageView>(R.id.destinationImage).drawable as BitmapDrawable).getBitmap()
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
-        val image = stream.toByteArray()
-        return image
     }
 
     /*
