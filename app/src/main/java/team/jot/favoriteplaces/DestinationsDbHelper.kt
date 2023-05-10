@@ -6,7 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class ContactDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class DestinationDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     /**
      * A companion object allows to hold static fields which are common to all instances of a given
@@ -15,14 +15,14 @@ class ContactDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     companion object {
 
         // Database name
-        val DATABASE_NAME = "contacts.db"
+        val DATABASE_NAME = "destinations.db"
 
         // Version number
         // If you change the database schema, you must increment the database version.
         const val DATABASE_VERSION = 1
 
         // Table(s) name
-        val TABLE_NAME = "contact_table"
+        val TABLE_NAME = "destination_table"
 
         // Column names
         val _ID = "id" // _(underscore indicates primary key), it is a convention

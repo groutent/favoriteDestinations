@@ -39,7 +39,7 @@ class DestinationCreation : AppCompatActivity() {
     val index = 0
 
     //To access your database, instantiate your subclass of SQLiteOpenHelper
-    private val dbHelper = ContactDbHelper(this)
+    private val dbHelper = DestinationDbHelper(this)
     private var image = ""
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -95,10 +95,12 @@ class DestinationCreation : AppCompatActivity() {
     fun returnDataToFirstActivity(view: View) {
         val mp = MediaPlayer.create(this, R.raw.createsound)
         mp.start()
+
         dbHelper.insertData(findViewById<EditText>(R.id.destinationName).text.toString(),
             findViewById<EditText>(R.id.destinationDescription).text.toString(),
             image,
             findViewById<RatingBar>(R.id.rating).rating, "0", "0")
+
         val myIntent = Intent()
         setResult(Activity.RESULT_OK, myIntent)
         finish()

@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     var adapter = MyRecyclerAdapter(destinations)
 
     //To access your database, instantiate your subclass of SQLiteOpenHelper
-    private val dbHelper = ContactDbHelper(this)
+    private val dbHelper = DestinationDbHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,13 +58,11 @@ class MainActivity : AppCompatActivity() {
         destinationCreationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 getAllData()
-                adapter.notifyDataSetChanged()
             }
         }
         newPlacesOnMapLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 getAllData()
-                adapter.notifyDataSetChanged()
             }
         }
 
@@ -101,6 +99,7 @@ class MainActivity : AppCompatActivity() {
             destinations.removeAll(destinations)
             newDestinations.reverse()
             destinations.addAll(newDestinations)
+            adapter.notifyDataSetChanged()
         } catch (e: Exception) {
             Log.e(TAG, "error: $e")
         }

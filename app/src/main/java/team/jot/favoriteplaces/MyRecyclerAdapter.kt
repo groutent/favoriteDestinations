@@ -43,7 +43,7 @@ class MyRecyclerAdapter(private val destinations: MutableList<Destination>): Rec
             // Make sure to change the  MyViewHolder class to inner class to get a reference to an object of outer class
             itemView.setOnLongClickListener {
                 val selectedItem = adapterPosition
-                val dbHelper = ContactDbHelper(itemView.context)
+                val dbHelper = DestinationDbHelper(itemView.context)
                 dbHelper.deleteData(destinations[selectedItem].id)
                 destinations.removeAt(selectedItem)
                 notifyItemRemoved(selectedItem)
