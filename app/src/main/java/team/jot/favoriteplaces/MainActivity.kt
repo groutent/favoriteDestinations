@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(dividerItemDecoration)
 
-
         destinationCreationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 getAllData()
@@ -68,6 +67,8 @@ class MainActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         }
+
+
     }
 
 
@@ -95,7 +96,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             while (cursor.moveToNext()) {
-                newDestinations.add(Destination(cursor.getInt(0), cursor.getString(1),cursor.getBlob(2),cursor.getString(3),cursor.getFloat(4),cursor.getDouble(5),cursor.getDouble(6)))
+                newDestinations.add(Destination(cursor.getInt(0), cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getFloat(4),cursor.getDouble(5),cursor.getDouble(6)))
             }
             destinations.removeAll(destinations)
             newDestinations.reverse()

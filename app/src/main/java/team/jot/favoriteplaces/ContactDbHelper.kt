@@ -45,7 +45,7 @@ class ContactDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
             "CREATE TABLE ${TABLE_NAME} (" +
                     "${_ID} INTEGER PRIMARY KEY," +
                     "${NAME} TEXT," +
-                    "${IMAGE} BLOB," +
+                    "${IMAGE} TEXT," +
                     "${DESCRIPTION} TEXT," +
                     "${RATING} TEXT," +
                     "${LAT} TEXT," +
@@ -69,7 +69,7 @@ class ContactDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     /**
      * our insertData() method allows to insert data to SQLIte database.
      */
-    fun insertData(name: String, description: String, image: ByteArray, rating: Float, lat: String, lng: String) {
+    fun insertData(name: String, description: String, image: String, rating: Float, lat: String, lng: String) {
 
         // Gets the data repository in write mode
         val db = this.writableDatabase
@@ -90,7 +90,7 @@ class ContactDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     /**
      * our updateData() methods allows to update a row with new field values.
      */
-    fun updateData(id: String, name: String, description: String, image: ByteArray, rating: String, lat: String, lng: String): Boolean {
+    fun updateData(id: String, name: String, description: String, image: String, rating: String, lat: String, lng: String): Boolean {
 
         // Gets the data repository in write mode
         val db = this.writableDatabase

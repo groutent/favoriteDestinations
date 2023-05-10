@@ -12,6 +12,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class MyRecyclerAdapter(private val destinations: MutableList<Destination>): RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>() {
 
@@ -71,7 +72,9 @@ class MyRecyclerAdapter(private val destinations: MutableList<Destination>): Rec
         // - replace the contents of the view with that element
         val currentItem = destinations[position]
         holder.destinationName.text = currentItem.name
-        holder.destinationImage.setImageBitmap(BitmapFactory.decodeByteArray(currentItem.image, 0 , currentItem.image.size))
+        Glide.with(holder.itemView.context)
+            .load(currentItem.image)
+            .into(holder.destinationImage)
         holder.description.text = currentItem.description
         holder.rating.rating = currentItem.rating
 

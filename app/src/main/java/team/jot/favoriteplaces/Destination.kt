@@ -6,7 +6,7 @@ import android.media.Image
 
 data class Destination(val id: Int,
                        val name: String,
-                       val image: ByteArray,
+                       val image: String,
                        val description: String,
                        val rating: Float,
                        val lat: Double,
