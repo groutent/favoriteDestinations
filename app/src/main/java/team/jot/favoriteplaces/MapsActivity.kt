@@ -29,10 +29,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
 
-    // provides a way to convert a physical address into geographic coordinates (latitude and longitude)
+    //convert physical address to long/lat
     private lateinit var geocoder: Geocoder
-
-    // an arbitrary number request code to be used when requesting permission to access the device's location.
     private val ACCESS_LOCATION_CODE = 123
 
 
@@ -41,22 +39,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -68,8 +55,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Request location permission and show user's current location on the Map
         getLocationPermission()
     }
-
-
+    //Uses the permissions granted in the manifest for fine/coarse location
     private fun getLocationPermission() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -82,25 +68,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             // show an explanation
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+                // Show an explanation to the user
                 ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     ACCESS_LOCATION_CODE)
-
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     ACCESS_LOCATION_CODE)
-
-                // ACCESS_LOCATION_CODE is an int constant (you decide a number). The callback method gets the
-                // result of the request.
             }
         }
     }
-
+    //Enablement of the users location
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -110,7 +90,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
+    //Error handling
     @SuppressLint("MissingPermission")
     private fun enableUserLocation() {
         mMap.isMyLocationEnabled = true
@@ -118,7 +98,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-    // Search a typed location using geocoder getFromLocationName method
+
+    //Grabbing the input in order to convert using geocoder
     @Suppress("DEPRECATION")
     fun searchButton(view: View) {
 
@@ -141,16 +122,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (!addressList.isNullOrEmpty()) {
                 val address = addressList[0]
                 Log.d(TAG, "$address")
-                // An address looks like below:
-                // Address[addressLines=[0:"Boston"],
-                // feature=Boston,admin=Massachusetts,sub-admin=Suffolk County,locality=Boston,
-                // thoroughfare=null,postalCode=null,countryCode=US,countryName=United States,
-                // hasLatitude=true,latitude=42.3600825,hasLongitude=true,
-                // longitude=-71.0588801,phone=null,url=null,extras=null]
 
                 // Convert to latitude and latitude to LatLng
                 val latLng = LatLng(address.latitude, address.longitude)
-
 
                 // Set the marker options
                 val markerOptions = MarkerOptions()
