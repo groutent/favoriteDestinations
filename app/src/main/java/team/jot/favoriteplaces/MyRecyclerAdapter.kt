@@ -1,7 +1,5 @@
 package team.jot.favoriteplaces
 
-import android.content.Intent
-import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.util.Log
 import android.view.LayoutInflater

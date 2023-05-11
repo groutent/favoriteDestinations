@@ -1,31 +1,17 @@
 package team.jot.favoriteplaces
 
-import android.Manifest
-import android.annotation.SuppressLint
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.location.Location
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.RatingBar
-import android.widget.TextView
-import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
+import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.google.android.gms.location.CurrentLocationRequest
 import com.google.android.gms.location.FusedLocationProviderClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -93,17 +79,31 @@ class DestinationCreation : AppCompatActivity() {
 
     //Save Button
     fun returnDataToFirstActivity(view: View) {
-        val mp = MediaPlayer.create(this, R.raw.createsound)
-        mp.start()
+        val desName = findViewById<EditText>(R.id.destinationName).text.toString()
+        // validates user input to make sure a destination name was received
+        if(desName == ""){
+            Toast.makeText(this, "Please enter a destination name :)", Toast.LENGTH_SHORT).show()
+        }
+        // validates that image from API has been loaded in
+        else if(image == "") {
+            Toast.makeText(this, "Please wait for the image to load :)", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            // media player for sound of creation of destination place
+            val mp = MediaPlayer.create(this, R.raw.createsound)
+            mp.start()
 
-        dbHelper.insertData(findViewById<EditText>(R.id.destinationName).text.toString(),
-            findViewById<EditText>(R.id.destinationDescription).text.toString(),
-            image,
-            findViewById<RatingBar>(R.id.rating).rating, "0", "0")
+            dbHelper.insertData(
+                findViewById<EditText>(R.id.destinationName).text.toString(),
+                findViewById<EditText>(R.id.destinationDescription).text.toString(),
+                image,
+                findViewById<RatingBar>(R.id.rating).rating, "0", "0"
+            )
 
-        val myIntent = Intent()
-        setResult(Activity.RESULT_OK, myIntent)
-        finish()
+            val myIntent = Intent()
+            setResult(Activity.RESULT_OK, myIntent)
+            finish()
+        }
     }
 
     /*

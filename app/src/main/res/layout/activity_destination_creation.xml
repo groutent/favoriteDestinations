@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Description"
+        android:hint="Description (optional)"
         android:inputType="textMultiLine"
         android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
